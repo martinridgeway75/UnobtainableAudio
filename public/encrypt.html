@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />        
+	    <meta name="viewport" content="width=device-width initial-scale=1.0 minimum-scale=1.0 maximum-scale=1.0 user-scalable=no" />
+	    <title>Encrypt audio</title>
+	</head>
+	<body>
+        <br />
+        <br />
+        <p>Encrypt audio</p>
+        <hr />
+        <form>
+            <label for="uploadAud">1. Upload an unencrypted audio file: </label>
+            <input type="file" id="uploadAud" />
+            <br />
+            <label for="passphrase1">2. Create a passphrase: </label>
+            <input type="text" id="passphrase1" />
+            <br />
+            <label for="goBtn">3. </label>
+            <button id="goBtn" type="button">Encrypt audio</button>
+            <br />
+            <label for="dlEnc">4. </label>
+            <button id="dlEnc" type="button">Download encrypted audio file</button>
+            <button id="dlKey" type="button">Download key file</button>
+        </form>
+        <div>
+            <br />
+            <div>
+                <p id="keyInfo" style="white-space: pre-wrap;"></p>
+                <br />
+                <br />
+                <br />
+                <p style="font-size: 0.7em;">To decrypt the audio, you will need:<br />&nbsp;&nbsp;&nbsp;a. The encrypted file<br />&nbsp;&nbsp;&nbsp;b. The key file<br />&nbsp;&nbsp;&nbsp;c. The passphrase</p>
+                <br />
+                <br />
+                <br />
+                <button id="reset" type="button">Reset</button>
+            </div>
+        </div>
+    </body>
+<script src="enc.js"></script>
+</html>
