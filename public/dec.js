@@ -71,7 +71,7 @@ window.addEventListener('load', function() {
 
     function playAudio() {
         buildAudioCtx().then(() => {
-            
+            resetAll();
         }); 
     }
 
@@ -91,6 +91,12 @@ window.addEventListener('load', function() {
         au.pswrdStr = evt.target.value;
     }
     
+    function resetAll() {
+        document.getElementById("passphrase2").value = "";
+        document.getElementById("uploadEnc").value = "";
+        document.getElementById("uploadKey").value = "";
+    }
+
     function handlersOn() {
         document.getElementById("uploadEnc").addEventListener("change",getBinUploaded,{capture:false,passive:true});
         document.getElementById("uploadKey").addEventListener("change",getKeyUploaded,{capture:false,passive:true});
