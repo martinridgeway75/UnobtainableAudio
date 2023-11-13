@@ -13,15 +13,15 @@ window.addEventListener('load', function() {
 
     async function decrypt(encData, b64key, pswrdStr) {
         try {
-            let parts = b64key.split("_");
-            let rounds = parseInt(atob(parts[0]));
-            let salt = unmakeb64Key(parts[1]);
-            let iv = unmakeb64Key(parts[2]);
+            const parts = b64key.split("_");
+            const rounds = parseInt(atob(parts[0]));
+            const salt = unmakeb64Key(parts[1]);
+            const iv = unmakeb64Key(parts[2]);
 
-            let pass = await crypto.subtle.importKey('raw', new TextEncoder().encode(pswrdStr), { "name": "PBKDF2" }, false, ['deriveBits']);
-            let bits = await crypto.subtle.deriveBits({ "name": "PBKDF2", "salt": salt, "iterations": rounds, "hash": { "name": "SHA-256" } }, pass, 256);
-            let key = await crypto.subtle.importKey('raw', bits, { "name": "AES-GCM" }, false, ['decrypt']);
-            let aud = await crypto.subtle.decrypt({ "name": "AES-GCM", "iv": iv }, key, encData);
+            const pass = await crypto.subtle.importKey('raw', new TextEncoder().encode(pswrdStr), { "name": "PBKDF2" }, false, ['deriveBits']);
+            const bits = await crypto.subtle.deriveBits({ "name": "PBKDF2", "salt": salt, "iterations": rounds, "hash": { "name": "SHA-256" } }, pass, 256);
+            const key = await crypto.subtle.importKey('raw', bits, { "name": "AES-GCM" }, false, ['decrypt']);
+            const aud = await crypto.subtle.decrypt({ "name": "AES-GCM", "iv": iv }, key, encData);
 
             return aud;
         }
@@ -42,8 +42,9 @@ window.addEventListener('load', function() {
 
         decrypt(encData, b64key, pswrdStr).then((aud) => { 
             au.audioBin = aud;
-            //intialize play functionality for the buffer... 
+            document.getElementById("playBtn").className = "";
         });
+        return false;
     }
 
     function getBinUploaded(el) {
@@ -65,7 +66,6 @@ window.addEventListener('load', function() {
             au.b64key = rdr.result;
             au.b64keyName = "" + tgt.name;
         }
-        //rdr.readAsArrayBuffer(tgt);
         rdr.readAsText(tgt);
     }
 
@@ -95,6 +95,7 @@ window.addEventListener('load', function() {
         document.getElementById("uploadEnc").addEventListener("change",getBinUploaded,{capture:false,passive:true});
         document.getElementById("uploadKey").addEventListener("change",getKeyUploaded,{capture:false,passive:true});
         document.getElementById("passphrase2").addEventListener("input",readPwInput,{capture:false,passive:true});
+        document.getElementById("doBtn").addEventListener("click",decryptAudio,{capture:false,passive:true});
         document.getElementById("playbtn").addEventListener("click",playAudio,{capture:false,passive:true});
     }
 

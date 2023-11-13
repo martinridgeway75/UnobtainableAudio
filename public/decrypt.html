@@ -4,8 +4,10 @@
 	    <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />        
 	    <meta name="viewport" content="width=device-width initial-scale=1.0 minimum-scale=1.0 maximum-scale=1.0 user-scalable=no" />
+        <style>
+            .hide { display: none; }
+        </style>
 	    <title>Decrypt audio</title>
-        <link rel="" />
 	</head>
 	<body>
         <br />
@@ -13,19 +15,22 @@
         <p>Decrypt audio</p>
         <hr />
         <form>
-            <label for="uploadEnc">1. Upload encrypted audio file: </label>
+            <label for="uploadEnc">1. Upload the encrypted audio file: </label>
             <input type="file" id="uploadEnc" />
             <br />
-            <label for="uploadKey">2. Upload key file: </label>
+            <label for="uploadKey">2. Upload the text file containing the key (a hashed base64 string): </label>
             <input type="file" id="uploadKey" />
             <br />
-            <label for="passphrase2">3. Enter passphrase: </label>
+            <label for="passphrase2">3. Enter the passphrase: </label>
             <input type="password"  id="passphrase2" />
+            <br />
+            <label for="doBtn">4. </label>
+            <button type="button" id="doBtn">Decrypt the audio</button>
         </form>
         <div>
             <br />
             <br />
-            <button id="playbtn" type="button">PLAY AUDIO</button>
+            <button id="playbtn" type="button" class="hide">PLAY AUDIO</button>
         </div>
     </body>
 <script src="dec.js"></script>
