@@ -96,7 +96,7 @@ window.addEventListener('load', function() {
         document.getElementById("uploadKey").addEventListener("change",getKeyUploaded,{capture:false,passive:true});
         document.getElementById("passphrase2").addEventListener("input",readPwInput,{capture:false,passive:true});
         document.getElementById("doBtn").addEventListener("click",decryptAudio,{capture:false,passive:true});
-        document.getElementById("playbtn").addEventListener("click",playAudio,{capture:false,passive:true});
+        document.getElementById("playBtn").addEventListener("click",playAudio,{capture:false,passive:true});
     }
 
     function detectFeatures() {
