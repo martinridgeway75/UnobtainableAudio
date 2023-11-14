@@ -114,8 +114,7 @@ window.addEventListener('load', function() {
     }
 
     function resetAll() {
-        document.getElementById("passphrase1").value = "";
-        document.getElementById("uploadAud").value = "";
+        document.getElementById("encForm").reset();
         document.getElementById("keyInfo").textContent = "";
         ua = {};
     }

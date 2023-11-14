@@ -92,9 +92,7 @@ window.addEventListener('load', function() {
     }
     
     function resetAll() {
-        document.getElementById("passphrase2").value = "";
-        document.getElementById("uploadEnc").value = "";
-        document.getElementById("uploadKey").value = "";
+        document.getElementById("decForm").reset();
     }
 
     function handlersOn() {
