@@ -142,7 +142,6 @@
         delete au.pswrdStr;
 
         freezeForm("Successfully decrypted");
-        //playAudio(); //not here! should be as click handler
     }
     
     function handlersOn() {
@@ -168,10 +167,11 @@
 //1. build the play, pause, stop audio buttons && timer
 //2. attach the click handlers 
 
-function playAudio() {
-    buildAudioCtx().then(() => {
-        //
-    }); 
+function initAudio() { //must be a click handler
+    buildAudioPlayer();
+    // buildAudioCtx().then(() => {
+    //     //
+    // }); 
 }
 
 async function buildAudioCtx() {
@@ -179,7 +179,6 @@ async function buildAudioCtx() {
         freezeFormOnError("No audio data");
         return;
     }
-
     const ctx = new window.AudioContext();
     const src = ctx.createBufferSource();
     const audiodata = await ctx.decodeAudioData(au.audioBin);
@@ -189,12 +188,34 @@ async function buildAudioCtx() {
     src.start(0); //NOTE: can only be called once
 }
 
+function buildAudioPlayer() {
+    const container = document.getElementById("audio-player");
+    const frag = document.createDocumentFragment();
+    const btn1 = document.createElement("BUTTON");
+    const btn2 = document.createElement("BUTTON");
+    const btn3 = document.createElement("BUTTON");
+    const i1 = document.createElement("I");
+    const i2 = document.createElement("I");
+    const i3 = document.createElement("I");
 
+    btn1.id = "audio-play";
+    btn1.className = "btn btn-primary me-1";
+    btn2.id = "audio-pause";
+    btn2.className = "btn btn-primary me-1";
+    btn3.id = "audio-stop";
+    btn3.className = "btn btn-primary";
+    i1.className = "icon-play";
+    i2.className = "icon-pause";
+    i3.className = "icon-stop";
 
-
-
-
-
+    btn1.appendChild(i1);
+    btn2.appendChild(i2);
+    btn3.appendChild(i3);
+    frag.appendChild(btn1);
+    frag.appendChild(btn2);
+    frag.appendChild(btn3);
+    container.appendChild(frag);
+}
 
 
     // })();

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Encrypt audio</title>
         <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico" />
-        <link href="../css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../css/bootstrap_add.css" rel="stylesheet" />
 	</head>
 	<body>
         <div class="container-fluid">
@@ -32,17 +32,21 @@
                     </div>
                 </form>
             </div>
-            <div id="dl-section" class="row d-none">
+            <div id="dl-section" class="row">
                 <div class="row g-3">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <button type="button" id="bin-dl" class="btn btn-sm btn-outline-primary">Download encrypted audio</button>
+                        <button type="button" id="bin-dl" class="btn btn-sm btn-outline-primary"><i class="icon-download-alt"></i></button>
+                        <span>Download encrypted audio</span>
                     </div>
                 </div>
                 <div class="row g-3">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <button type="button" id="key-dl" class="btn btn-sm btn-outline-primary">Download decryption key </button>
+                        <button type="button" id="key-dl" class="btn btn-sm btn-outline-primary"><i class="icon-download-alt"></i></button>
+                        <span>Download decryption key</span>
+                        <br />
+                        <span class="small fw-light fst-italic">N.B. Do not rename the key.</span>
                     </div>
                 </div>
                 <div class="row g-3">
