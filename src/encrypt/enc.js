@@ -78,8 +78,6 @@ window.addEventListener('load', function() {
         let data;
         let dataName;
 
-        console.log(ua, tgtId)
-
         if (tgtId === "bin-dl") {
             data = ua.encBlob;
             dataName = "" + ua.encDataName + ".bin";
