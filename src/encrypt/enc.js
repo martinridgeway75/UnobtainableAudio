@@ -9,10 +9,8 @@ window.addEventListener('load', function() {
     const confirm_pass = document.getElementById("pass2");
     const form = document.getElementById("enc-form");
     const field = document.getElementById("enc-field");
-    const uploader = document.getElementById("up-aud");
     const upload_label = document.getElementById("up-aud-label");
     const go_btn = document.getElementById("go-btn");
-    const reset_btn = document.getElementById("reset-btn");
     const dl_section = document.getElementById("dl-section");
     const bin_dl = document.getElementById("bin-dl");
     const key_dl = document.getElementById("key-dl");
@@ -187,11 +185,11 @@ window.addEventListener('load', function() {
     }
 
     function handlersOn() {
-        uploader.addEventListener("change",getAudioUploaded,{capture:false,passive:true});
+        document.getElementById("up-aud").addEventListener("change",getAudioUploaded,{capture:false,passive:true});
         pass.addEventListener("input",clearValidatePwInput,{capture:false,passive:true});
         confirm_pass.addEventListener("input",validatePwInput,{capture:false,passive:true});
         go_btn.addEventListener("click",confirmCanEncrypt,{capture:false,passive:true});
-        reset_btn.addEventListener("click",resetUa,{capture:false,passive:true});
+        document.getElementById("reset-btn").addEventListener("click",resetUa,{capture:false,passive:true});
     }
 
     function detectFeatures() {
@@ -205,4 +203,4 @@ window.addEventListener('load', function() {
     detectFeatures();
 
     })();
-    });
+});

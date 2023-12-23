@@ -12124,6 +12124,8 @@ textarea.form-control-lg {
   }
 }
 
-
+.small-625 {
+    font-size: 0.625em !important;
+}
 
 /*# sourceMappingURL=bootstrap_add.css.map */

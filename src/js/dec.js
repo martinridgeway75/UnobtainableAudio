@@ -1,17 +1,18 @@
 /*global window*/
 /*global document*/
 
-// window.addEventListener('load', function() {
-//     (function(){
+window.addEventListener('load', function() {
+    (function(){
         "use strict";
 
     const pass = document.getElementById("pass1");
     const form = document.getElementById("dec-form");
     const field = document.getElementById("dec-field");
-    const uploader = document.getElementById("up-aud");
-    const upload_label = document.getElementById("up-aud-label");
     const go_btn = document.getElementById("go-btn");
-    //const play_btn = document.getElementById("playBtn");
+    let timer_info;
+    let play_btn;
+    let ctx;
+    let reqAF;
     let au = {};
 
     function unmakeb64Key(part) {
@@ -89,7 +90,7 @@
 
         rdr.onloadend = function() {
             splitBlob(rdr.result);
-            upload_label.textContent = tgt.name;
+            document.getElementById("up-aud-label").textContent = tgt.name;
         }
         rdr.readAsArrayBuffer(tgt);
     }
@@ -114,15 +115,6 @@
         decryptAudio();
     }
 
-    // function resetAll() {
-    //     upload_label.textContent = "Upload encrypted file";
-    //     go_btn.classList.remove("btn-primary");
-    //     go_btn.style.borderColor = "";
-    //     go_btn.textContent = "Decrypt";
-    //     form.reset();
-    //     au = {};
-    // }
-
     function freezeForm(msg) {
         go_btn.classList.remove("btn-primary");
         go_btn.style.borderColor = "transparent";
@@ -135,17 +127,116 @@
         freezeForm(msg);
     }
 
+    function formatTimeStamp(ts) {
+        let mils = ts * 1000;
+    
+        return new Date(mils).toISOString().slice(11,22); //must be less than 24 hours to display correctly!
+    }
+    
+    function outputTimestamps() {
+        const ts = ctx.getOutputTimestamp();
+    
+        timer_info.textContent = formatTimeStamp(ts.contextTime);
+        reqAF = requestAnimationFrame(outputTimestamps); // re-register itself
+    }
+    
+    function updatePlayBtnEl(rmv, add, pause) {
+        play_btn.classList.remove(rmv);
+        play_btn.classList.add(add);
+        play_btn.dataset.paused = pause;
+    }
+    
+    function updatePlayBtn() {
+        let btn_is_paused = play_btn.dataset.paused;
+    
+        if (btn_is_paused === "false" && ctx.state === "running") {
+            ctx.suspend().then(() => {
+                updatePlayBtnEl("icon-pause","icon-play","true");
+                cancelAnimationFrame(reqAF);
+                return;
+            });
+        }
+        if (btn_is_paused === "true" && ctx.state === "suspended") {
+            ctx.resume().then(() => {
+                updatePlayBtnEl("icon-play","icon-pause","false");
+                reqAF = requestAnimationFrame(outputTimestamps);
+            });
+        }
+    }
+    
+    function audioEnded() {
+        cancelAnimationFrame(reqAF);
+        updatePlayBtnEl("icon-pause","icon-stop","true");
+        ctx.close();
+    }
+    
+    async function initAudio() {
+        ctx = new window.AudioContext();
+    
+        const src = ctx.createBufferSource();
+        const audiodata = await ctx.decodeAudioData(au.audioBin);
+    
+        src.buffer = (audiodata);
+        src.connect(ctx.destination);
+        src.start(0);
+        src.addEventListener("ended",audioEnded,false);
+        au = {};
+        reqAF = requestAnimationFrame(outputTimestamps);
+        play_btn.addEventListener("click",updatePlayBtn,{capture:false,passive:true});
+        document.getElementById("audio-nb").textContent = "Audio will play only once through.";
+    }
+
+    function oneClickInitAudioPlayback() {
+        play_btn.removeEventListener("click",oneClickInitAudioPlayback,{capture:false,passive:true});
+        play_btn.classList.remove("icon-play"); //faux init state
+        play_btn.classList.add("icon-pause"); //faux init state
+        initAudio();
+    }
+    
+    function setAudioPlayerReferences() {
+        play_btn = document.getElementById("audio-play");
+        timer_info = document.getElementById("audio-time");
+        play_btn.addEventListener("click",oneClickInitAudioPlayback,{capture:false,passive:true});
+    }
+    
+    function buildAudioPlayer() {
+        const container = document.getElementById("audio-player");
+        const frag = document.createDocumentFragment();
+        const btn1 = document.createElement("BUTTON");
+        const s1 = document.createElement("SPAN");
+    
+        btn1.id = "audio-play";
+        btn1.className = "btn btn-primary me-2 icon-play";
+        btn1.dataset.paused = "false"; //faux init state
+        s1.id = "audio-time";
+    
+        frag.appendChild(btn1);
+        frag.appendChild(s1);
+        container.appendChild(frag);
+    
+        setAudioPlayerReferences();
+    }
+    
+    function prepareAudio() {
+        if (!au.audioBin?.byteLength) {
+            freezeFormOnError("No audio data");
+            return;
+        }
+        buildAudioPlayer();
+    }
+
     function freezeFormDisplayAudio() {
-        delete au.b64key;
-        delete au.b64keyName;
-        delete au.encData;
-        delete au.pswrdStr;
+        au.b64key = undefined;
+        au.b64keyName = undefined;
+        au.encData = undefined;
+        au.pswrdStr = undefined;
 
         freezeForm("Successfully decrypted");
+        prepareAudio();
     }
     
     function handlersOn() {
-        uploader.addEventListener("change",getBinUploaded,{capture:false,passive:true});
+        document.getElementById("up-aud").addEventListener("change",getBinUploaded,{capture:false,passive:true});
         pass.addEventListener("input",readPwInput,{capture:false,passive:true});
         go_btn.addEventListener("click",confirmCanDecrypt,{capture:false,passive:true});
     }
@@ -153,6 +244,7 @@
     function detectFeatures() {
         if (!"crypto" in window) { return; }
         if (!"fetch" in window) { return; }
+        if (!"AudioContext" in window) { return; }
         if (window.self !== window.top) { return; }
         
         handlersOn();
@@ -160,63 +252,5 @@
 
     detectFeatures();
 
-
-
-/**********************************/
-
-//1. build the play, pause, stop audio buttons && timer
-//2. attach the click handlers 
-
-function initAudio() { //must be a click handler
-    buildAudioPlayer();
-    // buildAudioCtx().then(() => {
-    //     //
-    // }); 
-}
-
-async function buildAudioCtx() {
-    if (!au.audioBin) {
-        freezeFormOnError("No audio data");
-        return;
-    }
-    const ctx = new window.AudioContext();
-    const src = ctx.createBufferSource();
-    const audiodata = await ctx.decodeAudioData(au.audioBin);
-
-    src.buffer = (audiodata);
-    src.connect(ctx.destination);
-    src.start(0); //NOTE: can only be called once
-}
-
-function buildAudioPlayer() {
-    const container = document.getElementById("audio-player");
-    const frag = document.createDocumentFragment();
-    const btn1 = document.createElement("BUTTON");
-    const btn2 = document.createElement("BUTTON");
-    const btn3 = document.createElement("BUTTON");
-    const i1 = document.createElement("I");
-    const i2 = document.createElement("I");
-    const i3 = document.createElement("I");
-
-    btn1.id = "audio-play";
-    btn1.className = "btn btn-primary me-1";
-    btn2.id = "audio-pause";
-    btn2.className = "btn btn-primary me-1";
-    btn3.id = "audio-stop";
-    btn3.className = "btn btn-primary";
-    i1.className = "icon-play";
-    i2.className = "icon-pause";
-    i3.className = "icon-stop";
-
-    btn1.appendChild(i1);
-    btn2.appendChild(i2);
-    btn3.appendChild(i3);
-    frag.appendChild(btn1);
-    frag.appendChild(btn2);
-    frag.appendChild(btn3);
-    container.appendChild(frag);
-}
-
-
-    // })();
-    // });
+    })();
+});
