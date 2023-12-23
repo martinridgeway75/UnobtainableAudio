@@ -1,4 +1,6 @@
 # UnobtainableAudio
 
-The challenge was to create an audio file for an exam so that nobody would care if it got lost or was left accidentally on a classroom computer.
-The base64 key is a downloadable file only for the purpose of the demo.
+The challenge was to create a version of an exam audio file that was copyable, but unreadable (by itself).
+
+- The audio file cannot be played without knowledge of a specific passphrase.
+- The audio file cannot be played without possession of the content of a key specific to the audio file.
