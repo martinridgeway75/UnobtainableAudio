@@ -78,6 +78,8 @@ window.addEventListener('load', function() {
         let data;
         let dataName;
 
+        console.log(ua, tgtId)
+
         if (tgtId === "bin-dl") {
             data = ua.encBlob;
             dataName = "" + ua.encDataName + ".bin";
@@ -149,6 +151,8 @@ window.addEventListener('load', function() {
 
     function freezeFormDisplayInfo() {
         go_btn.classList.remove("btn-success");
+        go_btn.style.borderColor = "transparent";
+        go_btn.textContent = "Encryption successful";
         field.disabled = true;
         dl_section.classList.remove("d-none");
         attachDownloadListeners();
@@ -158,6 +162,8 @@ window.addEventListener('load', function() {
         if (field.disabled == false) { return; }
 
         releaseDownloadListeners();
+        go_btn.style.borderColor = "";
+        go_btn.textContent = "Encrypt";
         dl_section.classList.add("d-none");
         upload_label.textContent = "Upload audio file";
         field.disabled = false;

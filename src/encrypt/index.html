@@ -3,8 +3,7 @@
 	<head>
 	    <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Encrypt audio</title>
-        <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico" />
+        <title>Encrypt any file</title>
         <link href="../css/bootstrap_add.css" rel="stylesheet" />
 	</head>
 	<body>
@@ -14,9 +13,9 @@
                     <div class="col-1"></div>
                     <div class="col-10">
                         <fieldset id="enc-field" class="form-control">
-                            <legend>Encrypt audio</legend>
+                            <legend>Encrypt any file</legend>
                             <div class="mb-3">
-                                <label id="up-aud-label" for="up-aud" class="btn btn-outline-secondary" style="width:100%;">Upload audio file</label>
+                                <label id="up-aud-label" for="up-aud" class="btn btn-outline-secondary" style="width:100%;">Upload a file</label>
                                 <input type="file" id="up-aud" class="d-none" />
                             </div>
                             <div class="mb-3">
@@ -32,18 +31,18 @@
                     </div>
                 </form>
             </div>
-            <div id="dl-section" class="row">
+            <div id="dl-section" class="row d-none">
                 <div class="row g-3">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <button type="button" id="bin-dl" class="btn btn-sm btn-outline-primary"><i class="icon-download-alt"></i></button>
-                        <span>Download encrypted audio</span>
+                        <button type="button" id="bin-dl" class="btn btn-sm btn-outline-primary icon-download-alt"></button>
+                        <span>Download encrypted file</span>
                     </div>
                 </div>
                 <div class="row g-3">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <button type="button" id="key-dl" class="btn btn-sm btn-outline-primary"><i class="icon-download-alt"></i></button>
+                        <button type="button" id="key-dl" class="btn btn-sm btn-outline-primary icon-download-alt"></button>
                         <span>Download decryption key</span>
                         <br />
                         <span class="small-625 fw-light">Do not rename the file that contains the key.</span>
