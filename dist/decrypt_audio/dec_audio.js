@@ -5,9 +5,6 @@ window.addEventListener('load', function() {
     (function(){
         "use strict";
 
-    const pass = document.getElementById("pass1");
-    const form = document.getElementById("dec-form");
-    const field = document.getElementById("dec-field");
     const go_btn = document.getElementById("go-btn");
     let timer_info;
     let play_btn;
@@ -44,9 +41,8 @@ window.addEventListener('load', function() {
         const pswrdStr = au.pswrdStr;
 
         decrypt(encData, b64key, pswrdStr).then((aud) => { 
-            if (!aud) {
-                return false;
-            }
+            if (!aud) { return false; }
+            au = {};
             au.audioBin = aud;
             freezeFormDisplayAudio();
         });
@@ -95,23 +91,28 @@ window.addEventListener('load', function() {
         rdr.readAsArrayBuffer(tgt);
     }
 
+    function chkReqProps() {
+        if (!au.encData?.byteLength) { return false; }
+        if (!au.b64key?.length) { return false; }
+        if (!au.pswrdStr?.length) { return false; }
+        return true;
+    }
+
     function readPwInput(evt) {
+        const reqPropsExist = chkReqProps();
+
         au.pswrdStr = evt.target.value;
         go_btn.classList.remove("btn-primary");
 
-        if (!au.encData) { return; }
-        if (!au.b64key?.length) { return; }
-        if (!au.pswrdStr?.length) { return; }
-
+        if (!reqPropsExist) { return; }
         go_btn.classList.add("btn-primary");
     }
     
     function confirmCanDecrypt() {
-        if (!au.encData) { return; }
-        if (!au.b64key?.length) { return; }
-        if (!au.pswrdStr?.length) { return; }
-        if (!go_btn.classList.contains("btn-primary")) { return; }
+        const reqPropsExist = chkReqProps();
 
+        if (!reqPropsExist) { return; }
+        if (!go_btn.classList.contains("btn-primary")) { return; }
         decryptAudio();
     }
 
@@ -119,7 +120,7 @@ window.addEventListener('load', function() {
         go_btn.classList.remove("btn-primary");
         go_btn.style.borderColor = "transparent";
         go_btn.textContent = msg;
-        field.disabled = true;
+        document.getElementById("dec-field").disabled = true;
     }
     
     function freezeFormOnError(msg) {
@@ -137,7 +138,7 @@ window.addEventListener('load', function() {
         const ts = ctx.getOutputTimestamp();
     
         timer_info.textContent = formatTimeStamp(ts.contextTime);
-        reqAF = requestAnimationFrame(outputTimestamps); // re-register itself
+        reqAF = requestAnimationFrame(outputTimestamps); // re-register each time
     }
     
     function updatePlayBtnEl(rmv, add, pause) {
@@ -180,7 +181,7 @@ window.addEventListener('load', function() {
         src.connect(ctx.destination);
         src.start(0);
         src.addEventListener("ended",audioEnded,false);
-        au = {};
+        au = {}; //au.audioBin is detached
         reqAF = requestAnimationFrame(outputTimestamps);
         play_btn.addEventListener("click",updatePlayBtn,{capture:false,passive:true});
         document.getElementById("audio-nb").textContent = "Audio will play only once through.";
@@ -226,18 +227,13 @@ window.addEventListener('load', function() {
     }
 
     function freezeFormDisplayAudio() {
-        au.b64key = undefined;
-        au.b64keyName = undefined;
-        au.encData = undefined;
-        au.pswrdStr = undefined;
-
         freezeForm("Successfully decrypted");
         prepareAudio();
     }
     
     function handlersOn() {
         document.getElementById("up-aud").addEventListener("change",getBinUploaded,{capture:false,passive:true});
-        pass.addEventListener("input",readPwInput,{capture:false,passive:true});
+        document.getElementById("pass1").addEventListener("input",readPwInput,{capture:false,passive:true});
         go_btn.addEventListener("click",confirmCanDecrypt,{capture:false,passive:true});
     }
 
