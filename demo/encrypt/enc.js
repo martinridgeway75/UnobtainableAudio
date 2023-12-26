@@ -152,7 +152,6 @@ window.addEventListener('load', function() {
         
         ua.pswrdStr = evt.target.value;
         go_btn.classList.add("btn-success");
-        console.log(ua);
         return false;
     }
 
