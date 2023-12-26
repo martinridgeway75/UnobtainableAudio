@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8" />       
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>Decrypt a file</title>
+        <link href="bs_dec.css" rel="stylesheet" />
+	</head>
+	<body>
+<div class="container-fluid">
+    <div class="row">
+        <form id="dec-form" class="row g-3">
+            <div class="col"></div>
+            <div class="col-md-4 col-sm-5 col-xs-6">
+                <fieldset id="dec-field" class="form-control">
+                    <legend>Decrypt a file</legend>
+                    <div class="mb-3">
+                        <label for="up-aud" id="up-aud-label" class="btn btn-outline-secondary text-truncate" style="width:100%;">Upload encrypted file</label>
+                        <input type="file" id="up-aud" class="d-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="pass1" class="form-label-sm">Enter passphrase</label>
+                        <input type="password" id="pass1" class="form-control" />
+                    </div>
+                    <button type="button" id="go-btn" class="btn btn-sm">Decrypt</button>
+                </fieldset>
+            </div>
+            <div class="col"></div>
+        </form>
+    </div>
+    <div id="dl-section" class="row d-none">
+        <div class="row g-3">
+            <div class="col"></div>
+            <div class="col-md-4 col-sm-5 col-xs-6">
+                <button type="button" id="file-dl" class="btn btn-sm btn-outline-primary icon-download-alt"></button>
+                <span>Download decrypted file</span>
+                <br />
+                <span class="small-625 fw-light">The file will not have it's extension.</span>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row g-3">
+            <div class="col"></div>
+            <div class="col-md-4 col-sm-5 col-xs-6">
+                <button type="button" id="reset-btn" class="btn btn-sm btn-secondary">Reset</button>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+</div>
+    </body>
+    <script src="dec.js"></script>
+</html>

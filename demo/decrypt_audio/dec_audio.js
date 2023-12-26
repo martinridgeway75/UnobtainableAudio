@@ -9,6 +9,7 @@ window.addEventListener('load', function() {
     let timer_info;
     let play_btn;
     let ctx;
+    let src;
     let reqAF;
     let au = {};
 
@@ -171,27 +172,44 @@ window.addEventListener('load', function() {
         ctx.close();
     }
     
-    async function initAudio() {
-        ctx = new window.AudioContext();
-    
-        const src = ctx.createBufferSource();
-        const audiodata = await ctx.decodeAudioData(au.audioBin);
-    
-        src.buffer = (audiodata);
-        src.connect(ctx.destination);
-        src.start(0);
-        src.addEventListener("ended",audioEnded,false);
-        au = {}; //au.audioBin is detached
+    function startAudioPlayAnimation() {
+        play_btn.classList.remove("spinner-grow");
+        play_btn.classList.add("icon-pause");
         reqAF = requestAnimationFrame(outputTimestamps);
         play_btn.addEventListener("click",updatePlayBtn,{capture:false,passive:true});
         document.getElementById("audio-nb").textContent = "Audio will play only once through.";
     }
 
+    function startAudio() {
+        initAudio().then(() => {
+            src.connect(ctx.destination);
+            src.start(0);
+            au = {};
+            src.addEventListener("ended",audioEnded,false);
+            startAudioPlayAnimation();
+        });
+    }
+
+    async function initAudio() {
+        if (!ctx){
+            ctx = new window.AudioContext();
+        }
+        src = ctx.createBufferSource();
+
+        try {
+            const audioData = await ctx.decodeAudioData(au.audioBin);
+            src.buffer = (audioData);
+        } catch (e) {
+            freezeFormOnError("Unrecognizable as audio");
+        }
+    }
+
     function oneClickInitAudioPlayback() {
         play_btn.removeEventListener("click",oneClickInitAudioPlayback,{capture:false,passive:true});
         play_btn.classList.remove("icon-play"); //faux init state
-        play_btn.classList.add("icon-pause"); //faux init state
-        initAudio();
+        play_btn.classList.add("spinner-grow");
+        document.getElementById("audio-nb").textContent = "loading...";
+        startAudio();
     }
     
     function setAudioPlayerReferences() {
@@ -205,7 +223,7 @@ window.addEventListener('load', function() {
         const frag = document.createDocumentFragment();
         const btn1 = document.createElement("BUTTON");
         const s1 = document.createElement("SPAN");
-    
+
         btn1.id = "audio-play";
         btn1.className = "btn btn-primary me-2 icon-play";
         btn1.dataset.paused = "false"; //faux init state

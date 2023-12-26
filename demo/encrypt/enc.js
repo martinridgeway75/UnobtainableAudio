@@ -214,6 +214,5 @@ window.addEventListener('load', function() {
     }
 
     detectFeatures();
-
     })();
 });

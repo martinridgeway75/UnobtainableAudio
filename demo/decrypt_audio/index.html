@@ -4,18 +4,18 @@
 	    <meta charset="utf-8" />       
         <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>Decrypt audio</title>
-        <link href="bootstrap_add.css" rel="stylesheet" />
+        <link href="bs_dec_audio.css" rel="stylesheet" />
 	</head>
 	<body>
 <div class="container-fluid">
     <div class="row">
         <form id="dec-form" class="row g-3">
-            <div class="col-1"></div>
-            <div class="col-10">
+            <div class="col"></div>
+            <div class="col-md-4 col-sm-5 col-xs-6">
                 <fieldset id="dec-field" class="form-control">
                     <legend>Decrypt audio</legend>
                     <div class="mb-3">
-                        <label for="up-aud" id="up-aud-label" class="btn btn-outline-secondary" style="width:100%;">Upload encrypted file</label>
+                        <label for="up-aud" id="up-aud-label" class="btn btn-outline-secondary text-truncate" style="width:100%;">Upload encrypted file</label>
                         <input type="file" id="up-aud" class="d-none" />
                     </div>
                     <div class="mb-3">
@@ -25,16 +25,18 @@
                     <button type="button" id="go-btn" class="btn btn-sm">Decrypt</button>
                 </fieldset>
             </div>
+            <div class="col"></div>
         </form>
     </div>
     <div class="row">
         <div class="row g-3">
-            <div class="col-1"></div>
-            <div class="col-10">
+            <div class="col"></div>
+            <div class="col-md-4 col-sm-5 col-xs-6">
                 <div id="audio-player"></div>
                 <span id="audio-nb" class="small-625 fw-light"></span>
             </div>
-        </div>
+            <div class="col"></div>
+       </div>
     </div>
 </div>
     </body>
