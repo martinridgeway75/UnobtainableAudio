@@ -171,7 +171,7 @@ window.addEventListener('load', function() {
         go_btn.style.borderColor = "";
         go_btn.textContent = "Encrypt";
         dl_section.classList.add("d-none");
-        upload_label.textContent = "Upload audio file";
+        upload_label.textContent = "Upload a file";
         field.disabled = false;
         form.reset();
         ua = {};
